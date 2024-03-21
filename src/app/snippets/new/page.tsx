@@ -1,8 +1,30 @@
+import { redirect } from 'next/navigation';
 import { db } from '@/db';
 
-export default function CreateSnippet() {
+export default function CreateSnippetPage() {
+  async function createSnippet(formData: FormData) {
+    // designate the funciton as a Next.js Server Action
+    'use server';
+
+    // validate the user input values
+    const title = formData.get('title') as string;
+    const code = formData.get('code') as string;
+
+    // create a new record in the database
+    const snippet = await db.snippet.create({
+      data: {
+        title,
+        code,
+      },
+    });
+
+    console.log({ snippet });
+
+    // on success, redirect to homepage
+    redirect('/');
+  }
   return (
-    <form>
+    <form action={createSnippet}>
       <h3 className="font-bold m-3">Create a Snippet</h3>
       <div className="flex flex-col gap-4">
         <div className="flex gap-4">
