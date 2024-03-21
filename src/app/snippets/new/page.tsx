@@ -18,8 +18,6 @@ export default function CreateSnippetPage() {
       },
     });
 
-    console.log({ snippet });
-
     // on success, redirect to homepage
     redirect('/');
   }
