@@ -17,3 +17,16 @@ export async function updateSnippet({
   });
   redirect(`/snippets/${id}`);
 }
+
+/**
+ * Deletes a single snippet.
+ * Redirects the user back to the home page after the snippet is successfully deleted.
+ */
+export async function deleteSnippet({ id }: Pick<Snippet, 'id'>) {
+  await db.snippet.delete({
+    where: {
+      id,
+    },
+  });
+  redirect('/');
+}
