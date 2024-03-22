@@ -1,17 +1,17 @@
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { db } from '@/db';
 
-type Props = {
+interface Props {
   params: {
     id: string;
   };
-};
+}
 
 export default async function SnippetShowPage(props: Props) {
-  const id = Number(props.params.id);
   const snippet = await db.snippet.findFirst({
     where: {
-      id: id,
+      id: Number(props.params.id),
     },
   });
 
@@ -22,7 +22,12 @@ export default async function SnippetShowPage(props: Props) {
       <div className="flex m-4 justify-between items-center">
         <h1 className="text-xl font-bold">{snippet.title}</h1>
         <div className="flex gap-4">
-          <button className="p-2 border rounded">edit</button>
+          <Link
+            href={`/snippets/${props.params.id}/edit`}
+            className="p-2 border rounded"
+          >
+            edit
+          </Link>
           <button className="p-2 border rounded">delete</button>
         </div>
       </div>
