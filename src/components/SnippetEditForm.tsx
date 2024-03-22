@@ -11,13 +11,13 @@ export default function SnippedEditForm({ snippet }: { snippet: Snippet }) {
     setCode(value);
   }
 
-  async function handleSave() {
-    updateSnippet({ code, id: snippet.id });
-  }
+  const updateSnippetAction = updateSnippet.bind(null, {
+    id: snippet.id,
+    code,
+  });
 
   return (
     <div>
-      <button onClick={handleSave}>save</button>
       <Editor
         className="mt-4"
         height="40vh"
@@ -31,6 +31,11 @@ export default function SnippedEditForm({ snippet }: { snippet: Snippet }) {
           },
         }}
       />
+      <form action={updateSnippetAction}>
+        <button type="submit" className="p-2 border rounded mt-2">
+          save
+        </button>
+      </form>
     </div>
   );
 }
