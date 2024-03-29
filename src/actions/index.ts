@@ -1,7 +1,42 @@
 'use server';
+
 import { redirect } from 'next/navigation';
 import { db } from '@/db';
 import { type Snippet } from '@prisma/client';
+
+/**
+ * A server action to create a new snippet.
+ * Redirects to the homepage on a successful response.
+ */
+export async function createSnippet(
+  formState: { message: string },
+  formData: FormData
+) {
+  // // validate the user input values
+  const title = formData.get('title');
+  const code = formData.get('code');
+
+  // validate the title
+  if (typeof title !== 'string' || title.length < 3) {
+    return { message: 'Title must be longer' };
+  }
+
+  // validate the code
+  if (typeof code !== 'string' || code.length < 10) {
+    return { message: 'Code snippet must be longer' };
+  }
+
+  // create a new record in the database
+  const snippet = await db.snippet.create({
+    data: {
+      title,
+      code,
+    },
+  });
+
+  // on success, redirect to homepage
+  redirect('/');
+}
 
 /**
  * Updates a single snippet's 'code' property.
