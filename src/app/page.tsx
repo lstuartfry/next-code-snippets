@@ -1,9 +1,6 @@
 import Link from 'next/link';
 import { db } from '@/db';
 
-// force the homepage to be dynamic, and for next.js to render the page every time a user visits the route.
-export const dynamic = 'force-dynamic';
-
 export default async function Home() {
   const snippets = await db.snippet.findMany();
   return (

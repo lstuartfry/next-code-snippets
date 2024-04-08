@@ -1,6 +1,7 @@
 'use server';
 
 import { redirect } from 'next/navigation';
+import { revalidatePath } from 'next/cache';
 import { db } from '@/db';
 import { type Snippet } from '@prisma/client';
 
@@ -47,7 +48,8 @@ export async function createSnippet(
       };
     }
   }
-  // on success, redirect to homepage
+  // on success, revalidate and redirect to the homepage
+  revalidatePath('/');
   redirect('/');
 }
 
@@ -63,6 +65,8 @@ export async function updateSnippet({
     where: { id },
     data: { code },
   });
+  // on success, revalidate and redirect to snippet view page
+  revalidatePath(`/snippets/${id}`);
   redirect(`/snippets/${id}`);
 }
 
@@ -76,5 +80,7 @@ export async function deleteSnippet({ id }: Pick<Snippet, 'id'>) {
       id,
     },
   });
+  // on success, revalidate and redirect to the homepage
+  revalidatePath('/');
   redirect('/');
 }
