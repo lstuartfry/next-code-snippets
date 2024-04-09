@@ -44,3 +44,12 @@ export default async function SnippetShowPage(props: Props) {
     </div>
   );
 }
+
+// enable next.js to pre-render routes for all existing snippets in the database.
+export async function generateStaticParams() {
+  const snippets = await db.snippet.findMany();
+
+  return snippets.map((snippet) => ({
+    id: snippet.id.toString(),
+  }));
+}

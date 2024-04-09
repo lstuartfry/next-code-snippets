@@ -54,7 +54,7 @@ export async function createSnippet(
 
 /**
  * Updates a single snippet's 'code' property.
- * After a successful update, redirects to the snippet View page.
+ * After a successful update, revalidates the page cache and redirects to the snippet View page.
  */
 export async function updateSnippet({
   code,
@@ -64,6 +64,7 @@ export async function updateSnippet({
     where: { id },
     data: { code },
   });
+  revalidatePath(`/snippets/${id}`);
   redirect(`/snippets/${id}`);
 }
 
