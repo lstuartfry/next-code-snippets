@@ -7,7 +7,7 @@ import { type Snippet } from '@prisma/client';
 
 /**
  * A server action to create a new snippet.
- * Redirects to the homepage on a successful response.
+ * On success, clears the homepage cache and redirects to the homepage.
  */
 export async function createSnippet(
   formState: { message: string },
@@ -48,14 +48,13 @@ export async function createSnippet(
       };
     }
   }
-  // on success, revalidate and redirect to the homepage
   revalidatePath('/');
   redirect('/');
 }
 
 /**
  * Updates a single snippet's 'code' property.
- * Redirects the user back to the snippet View page after the update is successful.
+ * After a successful update, redirects to the snippet View page.
  */
 export async function updateSnippet({
   code,
@@ -65,14 +64,12 @@ export async function updateSnippet({
     where: { id },
     data: { code },
   });
-  // on success, revalidate and redirect to snippet view page
-  revalidatePath(`/snippets/${id}`);
   redirect(`/snippets/${id}`);
 }
 
 /**
  * Deletes a single snippet.
- * Redirects the user back to the home page after the snippet is successfully deleted.
+ * On success, clears the homepage cache and redirects to the homepage.
  */
 export async function deleteSnippet({ id }: Pick<Snippet, 'id'>) {
   await db.snippet.delete({
@@ -80,7 +77,6 @@ export async function deleteSnippet({ id }: Pick<Snippet, 'id'>) {
       id,
     },
   });
-  // on success, revalidate and redirect to the homepage
   revalidatePath('/');
   redirect('/');
 }
